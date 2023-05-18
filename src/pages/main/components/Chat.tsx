@@ -9,12 +9,12 @@ import { ISendMessageForm, sendMessageSchema } from '@/pages';
 import { MessagesList } from './MessagesList.tsx';
 
 interface IProps {
-  chatId: string;
   messages: IMessage[];
   onSendMessage: (message: string) => void;
+  displayName: string;
 }
 
-export const Chat = ({ messages, onSendMessage, chatId }: IProps) => {
+export const Chat = ({ messages, onSendMessage, displayName }: IProps) => {
   const {
     register,
     handleSubmit,
@@ -33,7 +33,7 @@ export const Chat = ({ messages, onSendMessage, chatId }: IProps) => {
   return (
     <section className="w-chat flex flex-col bg-chat-bg bg-chat-bg-image">
       <section className="bg-white h-chat-header flex items-center pl-4 font-medium text-lg border-b-2 border-login-page-input-bg">
-        {chatId}
+        {displayName}
       </section>
       <MessagesList messages={messages} />
       <form

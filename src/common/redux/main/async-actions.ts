@@ -11,9 +11,11 @@ interface ISendMessageBody extends IAuthData {
 interface IReturnedMessage {
   receiptId: string;
   body: {
+    timestamp: number;
     idMessage: string;
     senderData: {
       chatId: string;
+      chatName?: string;
     };
     messageData: {
       textMessageData: {

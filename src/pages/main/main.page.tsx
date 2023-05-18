@@ -68,7 +68,19 @@ export const MainPage = () => {
       return [];
     }
 
-    return chats.find((chat) => chat.chatId === selectedChat)?.messages || [];
+    return chats.find((chat) => chat.chatId === selectedChat)!.messages;
+  }, [chats, selectedChat]);
+
+  const selectedChatDisplayName = useMemo(() => {
+    if (!selectedChat) {
+      return '';
+    }
+
+    const selectedChatInstance = chats.find(
+      (chat) => chat.chatId === selectedChat
+    )!;
+
+    return selectedChatInstance.displayName || selectedChatInstance.chatId;
   }, [chats, selectedChat]);
 
   return (
@@ -83,7 +95,7 @@ export const MainPage = () => {
         <Chat
           messages={selectedChatMessages}
           onSendMessage={sendMessage}
-          chatId={selectedChat}
+          displayName={selectedChatDisplayName}
         />
       )}
     </section>

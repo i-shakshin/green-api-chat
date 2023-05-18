@@ -40,6 +40,7 @@ export const mainSlice = createSlice({
           id: payload,
           isSelfMessage: true,
           content: meta.arg.message,
+          timestamp: Date.now(),
         });
       })
       .addCase(getMessageAsyncAction.fulfilled, (draft, { payload }) => {
@@ -55,10 +56,15 @@ export const mainSlice = createSlice({
           return;
         }
 
+        if (payload.senderData.chatName) {
+          chat.displayName = payload.senderData.chatName;
+        }
+
         chat.messages.push({
           isSelfMessage: false,
           content: payload.messageData.textMessageData.textMessage,
           id: payload.idMessage,
+          timestamp: payload.timestamp,
         });
       });
   },

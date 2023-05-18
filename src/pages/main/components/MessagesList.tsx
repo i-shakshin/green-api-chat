@@ -1,4 +1,5 @@
 import { IMessage } from '@/common/types';
+import { getMessageTime } from '@/common/utils';
 
 import { Message } from './Message.tsx';
 
@@ -24,6 +25,7 @@ export const MessagesList = ({ messages }: IProps) => {
           key={message.id}
           content={message.content}
           isSelfMessage={message.isSelfMessage}
+          time={getMessageTime(message.timestamp)}
         />
       ))}
     </ul>
