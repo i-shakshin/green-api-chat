@@ -8,7 +8,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, IProps>(
-  ({ className, error, isFullWidth = false, ...props }, ref) => {
+  ({ className, error, isFullWidth = true, ...props }, ref) => {
     return (
       <div
         className={classNames('flex flex-col gap-2', { 'w-full': isFullWidth })}
