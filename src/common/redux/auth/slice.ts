@@ -14,7 +14,7 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState: {
     apiTokenInstance: '',
-    idInstance: '',
+    idInstance: 0,
     isLogged: false,
     isLoading: false,
   } as IAuthSlice,
