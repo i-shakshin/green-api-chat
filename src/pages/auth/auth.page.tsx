@@ -1,12 +1,22 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import { loginAsyncAction, RootState, useAppDispatch } from '@/common/redux';
-import { IAuthData } from '@/common/types';
+import { authSchema, IAuthData } from '@/common/types';
 import { Button, Input } from '@/common/ui';
+import { hasErrors } from '@/common/utils';
 
 export const AuthPage = () => {
-  const { register, handleSubmit } = useForm<IAuthData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IAuthData>({
+    resolver: zodResolver(authSchema),
+    mode: 'onBlur',
+  });
+
   const isLoading = useSelector((state: RootState) => state.auth.isLoading);
   const dispatch = useAppDispatch();
 
@@ -25,6 +35,7 @@ export const AuthPage = () => {
             className="bg-login-page-input-bg"
             placeholder="Идентификатор инстанса"
             disabled={isLoading}
+            error={errors.idInstance?.message}
             {...register('idInstance')}
           />
           <Input
@@ -32,10 +43,11 @@ export const AuthPage = () => {
             className="bg-login-page-input-bg"
             placeholder="API токен"
             disabled={isLoading}
+            error={errors.apiTokenInstance?.message}
             {...register('apiTokenInstance')}
           />
         </div>
-        <Button>Войти</Button>
+        <Button disabled={hasErrors(errors)}>Войти</Button>
       </form>
     </section>
   );

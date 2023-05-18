@@ -1,7 +1,10 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { IMessage } from '@/common/types';
 import { Button, Input } from '@/common/ui';
+import { hasErrors } from '@/common/utils';
+import { ISendMessageForm, sendMessageSchema } from '@/pages';
 
 import { MessagesList } from './MessagesList.tsx';
 
@@ -11,12 +14,16 @@ interface IProps {
   onSendMessage: (message: string) => void;
 }
 
-interface ISendMessageForm {
-  message: string;
-}
-
 export const Chat = ({ messages, onSendMessage, chatId }: IProps) => {
-  const { register, handleSubmit, reset } = useForm<ISendMessageForm>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ISendMessageForm>({
+    resolver: zodResolver(sendMessageSchema),
+    mode: 'onBlur',
+  });
 
   const handleSendMessage = (form: ISendMessageForm) => {
     onSendMessage(form.message);
@@ -34,12 +41,13 @@ export const Chat = ({ messages, onSendMessage, chatId }: IProps) => {
         className="p-4 w-full flex gap-2 bg-main-page-bg"
       >
         <Input
+          isFullWidth
           type="text"
           className="flex-1"
           placeholder="Введите сообщение"
           {...register('message')}
         />
-        <Button>Отправить</Button>
+        <Button disabled={hasErrors(errors)}>Отправить</Button>
       </form>
     </section>
   );

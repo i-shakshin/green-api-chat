@@ -1,7 +1,10 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { IChat } from '@/common/types';
 import { Button, Input } from '@/common/ui';
+import { hasErrors } from '@/common/utils';
+import { createChatSchema, ICreateChatForm } from '@/pages';
 
 import { ChatItem } from './ChatItem.tsx';
 
@@ -12,17 +15,21 @@ interface IProps {
   selectedChatId?: string;
 }
 
-interface ICreateChatForm {
-  userId: string;
-}
-
 export const ChatsList = ({
   chats,
   selectedChatId,
   onSelectChat,
   onCreateChat,
 }: IProps) => {
-  const { register, handleSubmit, reset } = useForm<ICreateChatForm>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ICreateChatForm>({
+    resolver: zodResolver(createChatSchema),
+    mode: 'onBlur',
+  });
 
   const handeCreateChat = (form: ICreateChatForm) => {
     onCreateChat(form.userId);
@@ -39,9 +46,10 @@ export const ChatsList = ({
           type="text"
           placeholder="Введите номер пользователя"
           className="bg-login-page-input-bg"
+          error={errors.userId?.message}
           {...register('userId')}
         />
-        <Button>Создать</Button>
+        <Button disabled={hasErrors(errors)}>Создать</Button>
       </form>
       <ul className="bg-white flex-1">
         {chats.map(({ chatId, messages }) => (

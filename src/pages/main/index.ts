@@ -1,2 +1,2 @@
-export * from '../../common/redux/main';
-export * from './main.page.tsx';
+export * from './main.page';
+export * from './schemes';

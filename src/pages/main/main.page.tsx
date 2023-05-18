@@ -15,6 +15,8 @@ import { ChatsList } from './components/ChatsList.tsx';
 
 export const MainPage = () => {
   const [selectedChat, setSelectedChat] = useState<string>();
+
+  const dispatch = useAppDispatch();
   const { idInstance, apiTokenInstance, chats } = useSelector(
     (state: RootState) => ({
       idInstance: state.auth.idInstance,
@@ -22,21 +24,10 @@ export const MainPage = () => {
       chats: state.main.chats,
     })
   );
-  const dispatch = useAppDispatch();
-  const sendMessage = (message: string) => {
-    if (!selectedChat) {
-      return;
-    }
 
-    dispatch(
-      sendMessageAsyncAction({
-        idInstance,
-        apiTokenInstance,
-        message,
-        chatId: selectedChat,
-      })
-    );
-  };
+  useEffect(() => {
+    dispatch(setSettingsAsyncAction({ apiTokenInstance, idInstance }));
+  }, [apiTokenInstance, dispatch, idInstance]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -53,6 +44,21 @@ export const MainPage = () => {
     };
   }, [apiTokenInstance, dispatch, idInstance]);
 
+  const sendMessage = (message: string) => {
+    if (!selectedChat) {
+      return;
+    }
+
+    dispatch(
+      sendMessageAsyncAction({
+        idInstance,
+        apiTokenInstance,
+        message,
+        chatId: selectedChat,
+      })
+    );
+  };
+
   const createChat = (id: string) => {
     dispatch(mainActions.createChat(id));
   };
@@ -64,10 +70,6 @@ export const MainPage = () => {
 
     return chats.find((chat) => chat.chatId === selectedChat)?.messages || [];
   }, [chats, selectedChat]);
-
-  useEffect(() => {
-    dispatch(setSettingsAsyncAction({ apiTokenInstance, idInstance }));
-  }, [apiTokenInstance, dispatch, idInstance]);
 
   return (
     <section className="flex absolute bg-main-page-bg w-main-page-wrapper h-main-page-wrapper">

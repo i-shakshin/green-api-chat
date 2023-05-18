@@ -1,3 +1,5 @@
+import { classNames } from '@/common/utils';
+
 interface IProps {
   chatId: string;
   isSelected: boolean;
@@ -15,7 +17,12 @@ export const ChatItem = ({
     <li
       key={chatId}
       onClick={() => onClick(chatId)}
-      className={'p-4 flex flex-col ' + (isSelected ? 'bg-main-page-bg' : '')}
+      className={classNames(
+        'p-4 flex flex-col hover:bg-gray-50 cursor-pointer',
+        {
+          'bg-main-page-bg': isSelected,
+        }
+      )}
     >
       <span className="text-l">{chatId}</span>
       <span className="text-sm text-input-text-color overflow-hidden overflow-ellipsis whitespace-nowrap">
