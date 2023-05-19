@@ -11,7 +11,7 @@
 ## Инструкция для локального запуска проекта:
 
 ```bash
-git clone https://github.com/i-shakshin/green-api-chat
+git clone https://github.com/i-shakshin/green-api-chat.git
 cd green-api-chat
 npm install
 npm run dev
